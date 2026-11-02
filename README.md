@@ -51,9 +51,9 @@ This version uses manual panel updates: preserve `config.local.js` and `uploads/
 
 ## Verification
 
-`npm run check` checks server and browser JavaScript syntax. `npm test` tests access-role predicates, identifier validation and workflow/input rules. GitHub Actions installs dependencies and runs both checks.
+`npm run check` checks server and browser JavaScript syntax. `npm test` tests access-role predicates, identifier validation and workflow/input rules. GitHub Actions installs dependencies, runs both checks, then starts a MySQL 8.4 service and runs integration checks for setup, roles, report ownership, private notes, attachments, resolution and account disabling. To run integration checks yourself, use a fresh dedicated test database, create a local test config with secureCookies false and trustProxy false, and run `npm run test:integration`. The integration test creates accounts and reports and expects an empty installation.
 
-Before public launch, test with your real MySQL and HTTPS proxy: create owner → project → reporter → report → attachment → developer assignment → private note → resolve. Verify the reporter cannot view another reporter's bug, download its attachment or see a private note. Automated tests currently cover domain rules, not database-backed end-to-end flows.
+Before public launch, test with your real MySQL and HTTPS proxy: create owner → project → reporter → report → attachment → developer assignment → private note → resolve. Verify the reporter cannot view another reporter's bug, download its attachment or see a private note. The automated integration suite covers API behavior; a manual browser and proxy check is still necessary.
 
 ## Current scope
 

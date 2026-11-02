@@ -5,6 +5,18 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: ci-password
+          MYSQL_DATABASE: solarisbugs
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -pci-password"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -13,3 +25,5 @@ jobs:
       - run: npm install --ignore-scripts
       - run: npm run check
       - run: npm test
+      - run: cp .github/ci-config.js config.local.js
+      - run: npm run test:integration
